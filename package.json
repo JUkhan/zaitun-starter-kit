@@ -1,0 +1,28 @@
+{
+  "name": "zaitun-starter",
+  "version": "1.0.0",
+  "description": "Simple zaitun starter repository",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git@https://github.com/JUkhan/zaitun-starter-kit.git"
+  },
+  "author": "Jasim Uddin Khan <Jasim.uddin.khan@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+     "zaitun":"1.5.3"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-2": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "budo": "^7.1.0"
+  },
+  "scripts": {
+    "build": "browserify app/index.js -o app/dist/build.js -t [ babelify --presets [ es2015 stage-2 react ] ]",    
+    "app": "budo app/js/main.js:build.js --dir app --verbose  --live -- -t babelify"
+    
+  }
+}
