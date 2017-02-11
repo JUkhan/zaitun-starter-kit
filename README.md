@@ -1,5 +1,6 @@
 # zaitun-starter-kit
 
-nmp install
-npm run app
+##nmp install
+
+##npm run app
 
