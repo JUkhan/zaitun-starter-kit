@@ -1,5 +1,4 @@
 //import "babel-polyfill";
-import 'zaitun';
 import {bootstrap} from 'zaitun';
 //import devTool from 'zaitun/devTool/devTool';
 
