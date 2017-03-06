@@ -12,10 +12,10 @@ export default class Counter{
     }   
     view({model, dispatch}){
          return <span>
-                    <button classNames="btn btn-primary btn-sm" on-click={ [dispatch, {type:INC}] }>+</button>
-                    <button classNames="btn btn-primary btn-sm" on-click={ [dispatch, {type:DEC}] }>-</button>
-                    <button on-click={[this.lazyInc, dispatch]}>+ (Async)</button>
-                    <b> Count : {model.data} {model.msg}</b>
+                    <button  on-click={ [dispatch, {type:INC}] }>+</button>                    
+                    <button  on-click={[this.lazyInc, dispatch]}>+ (Async)</button>
+                    <b style={{padding:'0 8px',border:'solid 1px green'}}>{model.msg?model.msg:model.data}</b>
+                    <button  on-click={ [dispatch, {type:DEC}] }>-</button>
                 </span>             
                 ;
     }   
