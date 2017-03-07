@@ -18,8 +18,8 @@ bootstrap({
   //devTool:devTool
 });
 
-if (DEVELOPMENT) {
-	if (module.hot) {
-		module.hot.accept();
-	}
-}
+// if (DEVELOPMENT) {
+// 	if (module.hot) {
+// 		module.hot.accept();
+// 	}
+// }

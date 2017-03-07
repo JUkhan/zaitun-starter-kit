@@ -2,7 +2,12 @@
 
 ##npm install
 
-##npm run app
+##npm run dev
 
-## Browse http://localhost:9966/
+## Browse http://localhost:8080/
+
+###For Production(windows)
+##set NODE_ENV=production
+##npm run build
+
 
