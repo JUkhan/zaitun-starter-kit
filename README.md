@@ -1,21 +1,18 @@
-
 Zaitun 
 ========
 A light weight javascript framework with time-travelling debugger, inspired by Elm Architecture, snabbdom, snabbdom-jsx
-
 ## Installation
----
+
 ```sh
 git clone https://github.com/JUkhan/zaitun-starter-kit quickstart
 cd quickstart
 npm install
 npm run dev
-Browse http://localhost:8080/
+Browse http://localhost:8080
 For Production(windows)
 set NODE_ENV=production
 npm run build
 ```
-
 ## The Basic Pattern
 The logic of every Zaitun component will break up into three cleanly separated parts:
 
@@ -101,8 +98,5 @@ I definitely know the user will be able to increment and decrement the counter. 
 If you get an Increment action, you increment the model. If you get a Decrement action, you decrement the model. Pretty straight-forward stuff.
 
 This pattern is the essence of The Zaitun Framework. Every example we see from now on will be a slight variation on this basic pattern: init, view, update.
-
-
-
 
 
