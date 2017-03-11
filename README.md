@@ -1,5 +1,7 @@
 
-###### Zaitun is extremely light weight, but powerful component based framework, inspired by [Elm Architecture](https://www.gitbook.com/book/evancz/an-introduction-to-elm), [snabbdom](https://github.com/snabbdom/snabbdom) and [snabbdom-jsx](https://github.com/yelouafi/snabbdom-jsx)
+Zaitun 
+========
+A light weight javascript framework with time-travelling debugger, inspired by Elm Architecture, snabbdom, snabbdom-jsx
 
 ## Installation
 ---
