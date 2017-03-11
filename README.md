@@ -1,14 +1,4 @@
-# zaitun-starter-kit
 
-##npm install
-
-##npm run dev
-
-## Browse http://localhost:8080/
-
-###For Production(windows)
-##set NODE_ENV=production
-##npm run build
 ###### Zaitun is extremely light weight, but powerful component based framework, inspired by [Elm Architecture](https://www.gitbook.com/book/evancz/an-introduction-to-elm), [snabbdom](https://github.com/snabbdom/snabbdom) and [snabbdom-jsx](https://github.com/yelouafi/snabbdom-jsx)
 
 ## Installation
