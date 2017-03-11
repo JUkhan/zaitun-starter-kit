@@ -32,71 +32,80 @@ class Component{
 }
 ```
 That is really the essence of The Zaitun. We will proceed by filling in this skeleton with increasingly interesting logic.
-## Example
-
+## Example 1 : a basic counter
+The counter component is defined in its own module ‘counter.js’
 ```javascript
 /** @jsx html */
-import {bootstrap, html} from 'zaitun';
-
+import {h, html} from 'zaitun';
 class Counter{ 
     init(){
         return {count:0}
     }
     view({model, dispatch}){
         return <div>
-            <button on-click={[dispatch,{type:'inc'}]}>+</button>
-            <button on-click={[dispatch,{type:'dec'}]}>-</button>
+            <button on-click={[dispatch,{type:'INC'}]}>+</button>
+            <button on-click={[dispatch,{type:'DEC'}]}>-</button>
             <b>&nbsp;{model.count}</b>
             </div>
     }
     update(model, action){
         switch (action.type) {
-            case 'inc': return {count:model.count+1}
-            case 'dec': return {count:model.count-1}          
+            case 'INC': return {count:model.count+1}
+            case 'DEC': return {count:model.count-1}          
             default:
                 return model
         }
     }
 }
-bootstrap({
-    containerDom:'#app',
-    mainComponent:Counter
-})
+export default Counter;
 ```
-That's everything!
+> Zaitun uses [snabbdom](https://github.com/snabbdom/snabbdom)  for producing Html chunk. So you can use markup function h(..) or [snabbdom-jsx](https://github.com/yelouafi/snabbdom-jsx) for view
 
-When writing this program from scratch, I always start by taking a guess at the model. To make a counter, we at least need to keep track of a number that is going up and down. So let's just start with that!
+The counter component is defined by the following properties
+- Model : {count:0}
+- View : provides the user with 2 buttons in order to increment/decrement a counter , and a text that shows the current count.
+- Update : sensible to 2 actions : INC and DEC that increments or decrements the counter value..
+
+The first thing to note is that the view/update are both pure functions, they have no dependency on any external environment besides their input. The counter component itself doesn’t hold any state or variable, it just describes how to construct a view from a given state, and how to update a given state with a given action. Thanks to its purity, the counter component can be easily plugged into any environment that is able to supply it with its dependencies : a state  and an action.
+
+Second note, the ‘[dispatch, action]’ expression on the click event listener for each button. We are translating the raw user event (mouse click) into a meaningful action to our program (Increment or Decrement). Using ES6 symbols is better than raw strings (avoids collisions in action names).
+## Run the Counter component -  'main.js'
 ```javascript
-init(){
-    return {count:0}
-}
+import {bootstrap} from 'zaitun';
+import Counter from './counter';
+ bootstrap({
+  containerDom:'#app',
+  mainComponent:Counter
+});
 ```
-Now that we have a model, but how do we actually make some HTML and show it on screen? Zaitun using [snabbdom](https://github.com/snabbdom/snabbdom) and  [snabbdom-jsx](https://github.com/yelouafi/snabbdom-jsx) for producing Html chunk.
+## Set time-travelling debugger - 'main.js'
 ```javascript
-view({model, dispatch}){
-        return <div>
-            <button on-click={[dispatch,{type:'inc'}]}>+</button>
-            <button on-click={[dispatch,{type:'dec'}]}>-</button>
-            <b>&nbsp;{model.count}</b>
-            </div>
-    }
+import {bootstrap} from 'zaitun';
+import devTool from 'zaitun/devTool/devTool';
+import Counter from './counter';
+ bootstrap({
+  containerDom:'#app',
+  mainComponent:Counter,
+  devTool:devTool
+});
 ```
-One thing to notice is that our view function is producing a Html value. This means that it is a chunk of HTML that can produce Action values. And when you look at the definition, you see the on-click attributes are set to dispatch out 'inc' and 'dec' values. These will get fed directly into our update function, driving our whole app forward.
+ To see how our component can be tested; here is an example using the ‘tape’ testing library
+ ```
+import test from 'tape';
+import Counter from './counter';
+const counterCom=new Counter();
+test('counter update function', (assert) => {
+    
+  var state = {count:10};
+  state = counterCom.update(state, {type: 'INC'});
+  assert.equal(state.count, 11);
 
-```javascript
-    update(model, action){
-        switch (action.type) {
-            case 'inc': return {count:model.count+1}
-            case 'dec': return {count:model.count-1}          
-            default:
-                return model
-        }
-    }
-```
-I definitely know the user will be able to increment and decrement the counter. The action describes these capabilities as data. Important! From there, the update function just describes what to do when you receive one of these actions.
+  state = counterCom.update(state.count, {type: 'DEC'});
+  assert.equal(state.count, 10);
 
-If you get an Increment action, you increment the model. If you get a Decrement action, you decrement the model. Pretty straight-forward stuff.
+  assert.end();
+});
+ ```
 
-This pattern is the essence of The Zaitun Framework. Every example we see from now on will be a slight variation on this basic pattern: init, view, update.
-
+inprogress...
 
