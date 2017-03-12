@@ -9,7 +9,16 @@ const DEC=Symbol('dec');
 export default class Counter{ 
     init(){       
         return {data:0, msg:''}
-    }   
+    }
+	onViewInit(model, dispatch){
+       
+    } 
+    canDeactivate(){
+        return confirm('Plese do not leave this page') //promise
+    }
+    onDestroy(){
+        console.log('destroy...')
+    } 	
     view({model, dispatch}){
          return <span>
                     <button  on-click={ [dispatch, {type:INC}] }>+</button>                    
