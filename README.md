@@ -25,9 +25,9 @@ This pattern is so reliable that I always start with the following skeleton and 
 class Component{
     init(){
     }
-    view(model, action){
+    view({model, dispatch}){
     }
-    update({model, dispatch}){
+    update(model, action){
     }
 }
 ```
