@@ -13,8 +13,16 @@ const UPDATE=Symbol('counterAction');
 
 export default class CounterList{
     
-    init(){
-        return {nextId:0, counters:[]}; 
+    init(dispatch, routeParams){
+        console.log(routeParams);        
+        let times = 0, counters=[];
+        if(routeParams!==undefined){
+            times=+routeParams.times
+            for(let i=0;i<times; i++){
+                counters.push({id: i, counter: Counter.init()});
+            }
+        }
+        return {nextId: times, counters}; 
     }   
     view({model, dispatch}){
         return <div classNames="card card-outline-secondary mb-3 text-center">

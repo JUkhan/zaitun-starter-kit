@@ -185,6 +185,77 @@ update(model, action){
 - the RESET action ‘init’ each counter to its default state.
 - the UPDATE_XCOORDINATE and UPDATE_YCOORDINATE are, as we just saw, wrappers around a counter action. The function forwards the wrapped action to the concerned child counter along with its specific state.
 
+## ROUTING - learn to navigate among the views
+---
+Zaitun provides a Router object. We can dynamiclly add/remove routes and navigate to the views.
 
+When we click on a navigation, component manager resolved the component from the route list and become ready to host. We can find this component from Router.CM.child.
+So, we need a main/root component where nav component(Router.CM.child) should be hosted.
+
+The MainCom is defined in its own module ‘mainCom.js’
+```javascript
+import {Router} from 'zaitun';
+
+const CHILD = Symbol('CHILD');
+export class MainCom{
+    init(){
+        return {};
+    }
+    view({model, dispatch}){
+        return <div>       
+        <h3>Root component</h3>
+        <div>{Router.CM.child.view({model:model.child, dispatch:action=>dispatch({type:CHILD, childAction:action})})}</div>
+        </div>
+    }   
+    update(model, action){
+        switch (action.type) {            
+            case CHILD:
+               return{...model,child:Router.CM.child.update(model.child, action.childAction)};
+               
+            default:
+            return model;
+        }
+    }
+}
+```
+### Set mainCom and Configure routes
+```javascript
+import {bootstrap} from 'zaitun';
+
+import {MainCom}  from './mainCom';
+import Counter from './Counter'; 
+
+const routes=[
+    {path:"counter", component:Counter},
+    {path:'counterList/:times/:msg',loadComponent:()=>System.import('./CounterList')},
+    {path:'todos', loadComponent:()=>System.import('./todos/todos')},
+    {path:'formExample', loadComponent:()=>System.import('./FormExample'), cache:true}
+  ];
+  
+  bootstrap({
+      containerDom:'#app',
+      mainComponent:MainCom,  
+      routes:routes,
+      activePath:'counter'
+});
+```
+The routes are an array of route definitions. This route definition has the following parts:
+
+- `path` : the router matches this route's path to the URL in the browser address bar
+- `component` :  the component that the component manager should create when navigating to this route
+- `loadComponent` : the component dynamically loaded when navigating to this route
+- `cache` : Component state should be cached if it set to true
+
+> `loadComponent` only workes in webpack when your component export as default
+
+### Component Life cycle hook methods
+```javascript    
+    init(dispatch, routeParams){}
+    onViewInit(model, dispatch){}
+    canDeactivate(){
+        return bool|Promise
+    }
+    onDestroy(){}
+```    
 inprogress...
 

@@ -3,10 +3,11 @@ import {bootstrap} from 'zaitun';
 //import devTool from 'zaitun/devTool/devTool';
 
  import {mainCom}  from './mainCom';
- import Counter from './Counter'; 
+ import Counter from './Counter';
+
 const routes=[
     {path:"/counter", component:Counter},
-    {path:'/counterList', loadComponent:()=>System.import('./CounterList')},
+    {path:'/counterList/:times/:msg', loadComponent:()=>System.import('./CounterList')},
     {path:'/todos', loadComponent:()=>System.import('./todos/todos')},
     {path:'/formExample', loadComponent:()=>System.import('./FormExample'), cache:true}
   ];
