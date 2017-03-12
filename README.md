@@ -106,7 +106,7 @@ test('counter update function', (assert) => {
   assert.end();
 });
  ```
-## Example 2: Nested Components(parent chield relation)
+## Example 2: Nested Components(parent child relation)
 The Pointer component is defined in its own module ‘pointer.js’
 ```javascript
 import Counter from './counter';
