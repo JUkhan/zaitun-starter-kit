@@ -1,6 +1,6 @@
 Zaitun 
 ========
-A light weight javascript framework with time-travelling debugger, inspired by Elm Architecture, snabbdom, snabbdom-jsx
+A light weight javascript framework with time-travelling debugger
 ## Installation
 
 ```sh
@@ -16,7 +16,7 @@ npm run build
 ## The Basic Pattern
 The logic of every Zaitun component will break up into three cleanly separated parts:
 
-- init - the state of your component
+- init - the state of your component(to create a state from scratch)
 - view - a way to view your state as HTML
 - update - a way to update your state
 
@@ -106,6 +106,85 @@ test('counter update function', (assert) => {
   assert.end();
 });
  ```
+## Example 2: Nested Components(parent chield relation)
+The Pointer component is defined in its own module ‘pointer.js’
+```javascript
+import Counter from './counter';
+const CounterCom=new Counter();
+
+const RESET               = Symbol('reset');
+const UPDATE_XCOORDINATE  = Symbol('update-x-coordinate');
+const UPDATE_YCOORDINATE  = Symbol('update-y-coordinate');
+
+class Pointer{
+    init(){
+        return {x:CounterCom.init(), y:CounterCom.init()}
+    }
+    view({model, dispatch}){       
+        return <div>
+          <h1>(x, y)={model.x.count}, {model.y.count} </h1>
+          <div><button on-click={[dispatch,{type:RESET}]}>Reset</button></div>
+          X{CounterCom.view({model:model.x, dispatch:counterAction=>dispatch({type:UPDATE_XCOORDINATE, payload:counterAction})})} 
+          Y{CounterCom.view({model:model.y, dispatch:counterAction=>dispatch({type:UPDATE_YCOORDINATE, payload:counterAction})})} 
+        </div>
+    }
+    update(model, action){
+        switch (action.type) {
+            case RESET: return this.init()
+            case UPDATE_XCOORDINATE:
+                return {...model, x:CounterCom.update(model.x, action.payload)}
+            case UPDATE_YCOORDINATE:
+                return {...model, y:CounterCom.update(model.y, action.payload)}
+            default:
+               return model
+        }
+    }
+}
+export default {Pointer, actions:{RESET, UPDATE_XCOORDINATE, UPDATE_YCOORDINATE}}
+```
+First we defined our model and its associated set of actions
+```javascript
+const RESET               = Symbol('reset');
+const UPDATE_XCOORDINATE  = Symbol('update-x-coordinate');
+const UPDATE_YCOORDINATE  = Symbol('update-y-coordinate');
+init(){
+        return {x:CounterCom.init(), y:CounterCom.init()}
+}
+```
+The model exports 2 properties: ‘x’ and ‘y’ to hold the states of the 2 counters. We define 3 actions on : the first reset both counters to ‘0’. W’ll see the use of the 2 others in a moment.
+
+The view function is responsible for rendering point value((x, y)=2, -1) and the 2 counters as well as providing the user with a button to reset them.
+```javascript
+ view({model, dispatch}){       
+        return <div>
+          <h1>(x, y)={model.x.count}, {model.y.count} </h1>
+          <div><button on-click={[dispatch,{type:RESET}]}>Reset</button></div>
+          X{CounterCom.view({model:model.x, dispatch:counterAction=>dispatch({type:UPDATE_XCOORDINATE, payload:counterAction})})} 
+          Y{CounterCom.view({model:model.y, dispatch:counterAction=>dispatch({type:UPDATE_YCOORDINATE, payload:counterAction})})} 
+        </div>
+    }
+```
+The thing to note is the param object({model, dispatch}) passed to the child views:
+- Each view gets its relevant part (model.x/model.y) of the parent state.
+- The dynamic dispatch property that’s passed down to the children’s views : For example, an action triggered from the X child counter will be wrapped in an ‘UPDATE_XCOORDINATE’ action, so when the parent’s update function is invoked, w’ll be able to forward the original action (stored in the ‘payload’ attribute) to the correct counter.
+
+The update function handles 3 actions:
+```javascript
+update(model, action){
+        switch (action.type) {
+            case RESET: return this.init()
+            case UPDATE_XCOORDINATE:
+                return {...model, x:CounterCom.update(model.x, action.payload)}
+            case UPDATE_YCOORDINATE:
+                return {...model, y:CounterCom.update(model.y, action.payload)}
+            default:
+               return model
+        }
+    }
+```
+- the RESET action ‘init’ each counter to its default state.
+- the UPDATE_XCOORDINATE and UPDATE_YCOORDINATE are, as we just saw, wrappers around a counter action. The function forwards the wrapped action to the concerned child counter along with its specific state.
+
 
 inprogress...
 
