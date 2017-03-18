@@ -14,7 +14,7 @@ export default class Counter{
        
     } 
     canDeactivate(){
-        return confirm('Plese do not leave this page') //promise
+        return confirm('Do you want to leave this page?') //promise
     }
     onDestroy(){
         console.log('destroy...')

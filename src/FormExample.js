@@ -32,7 +32,7 @@ export default class FormExample{
         const countries=[
             {text:'Bangladesh', value:1},
             {text:'Pakistan', value:2},
-            {text:'Ujbikistan', value:3}
+            {text:'Uzbekistan', value:3}
         ];
         Grid.setSelectData(4, countries);
     }
