@@ -15,13 +15,7 @@ const TOGGLE_ALL    = Symbol('TOGGLE_ALL');
 export default class Todos{
     init(dispatch){
         return {nextId:1, tasks:[], filter:'all', todoInput:''};
-    }
-    onDestroy(){
-        console.log('Todos onDestroy')
-    }
-    canDeactivate(){
-        return confirm('leave?');
-    }
+    }   
     onInput(e, dispatch){
         if(e.keyCode===KEY_ENTER){
             dispatch({type:ADD, title:e.target.value});
