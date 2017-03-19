@@ -1,6 +1,6 @@
 /** @jsx html */
 
-import { html } from 'zaitun';
+import { html,Router } from 'zaitun';
 import {Task, Toggle} from './task';
 const TaskCom=new Task();
 
@@ -16,6 +16,12 @@ export default class Todos{
     init(dispatch){
         return {nextId:1, tasks:[], filter:'all', todoInput:''};
     }
+    onDestroy(){
+        console.log('Todos onDestroy')
+    }
+    canDeactivate(){
+        return confirm('leave?');
+    }
     onInput(e, dispatch){
         if(e.keyCode===KEY_ENTER){
             dispatch({type:ADD, title:e.target.value});
@@ -25,7 +31,7 @@ export default class Todos{
         const remaining = this.remainingTodos(model.tasks);
         const filtered=this.filteredTodos(model.tasks, model.filter);
         return <div classNames="card ">
-                    <div classNames="card-header">Todos</div>
+                    <div classNames="card-header">Todos <button on-click={()=>Router.navigate('counter')}>Go to Counter</button></div>
                     <div classNames="card-block">
                         <div classNames="form-inline">
                             <input on-click={e=>dispatch({type:TOGGLE_ALL, done:e.target.checked})} classNames="fform-check-input" type="checkbox" />

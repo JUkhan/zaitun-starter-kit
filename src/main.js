@@ -15,7 +15,7 @@ bootstrap({
   containerDom:'#app',
   mainComponent:mainCom,  
   routes:routes,
-  activePath:'/counter',
+  activePath:'todos',
   //devTool:devTool
 });
 

@@ -7,11 +7,12 @@ const DEC=Symbol('dec');
 
 
 export default class Counter{ 
-    init(){       
+    init(){
+         console.log('init')       
         return {data:0, msg:''}
     }
 	onViewInit(model, dispatch){
-       
+       console.log('viewInit')
     } 
     canDeactivate(){
         return confirm('Do you want to leave this page?') //promise
