@@ -101,10 +101,10 @@ export default class FormExample{
     getFormOptions2(){
         return {
             viewMode:'popup', title:'Popup Title', name:'pform', size:'lg',
-            modalClose:()=>true,
+            modalClose:()=>true,            
             buttons:[{label:'Close',on:{click:()=>TestForm2.modalClose()}, classNames:'.btn.btn-outline-success', elmSize:'sm'}],
              inputs:[
-                {type:'vnode', vnode:<div>Hello popup</div>},
+                {type:'vnode', vnode:model=><div>Hello popup {model.data.name}</div>},
                 {type:'text', field:'name', label:'Name'},
                 {type:'tabs', activeTab:'tab1',tabs:{
                     tab1:{inputs:[{ 

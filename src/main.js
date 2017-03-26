@@ -10,7 +10,8 @@ const routes=[
     {path:'/counterList/:times/:msg', loadComponent:()=>System.import('./CounterList')},
     {path:'/todos', loadComponent:()=>System.import('./todos/todos')},
     {path:'/formExample', loadComponent:()=>System.import('./FormExample')},
-    {path:'/gridExample', loadComponent:()=>System.import('./GridExample'), cache:true}
+    {path:'/gridExample', loadComponent:()=>System.import('./GridExample'), cache:true},
+    {path:'/dispute', loadComponent:()=>System.import('./dispute/disputeCom'), cache:true}
   ];
 bootstrap({
   containerDom:'#app',

@@ -1,5 +1,6 @@
 import {h} from 'zaitun';
 import {juPage} from './juPager';
+import {s4} from './utils';
 const DATA_CHANGE=Symbol('SET_DATA');
 const PAGER_ACTION=Symbol('pager_action');
 const REFRESH=Symbol('REFRESH');
@@ -8,6 +9,8 @@ class juGrid{
     constructor(){
         this.data=[];
         this.pager=new juPage();
+        this.__loaded=false;
+        this.__id=s4(); 
     }   
     init(){
         return {};
@@ -27,11 +30,18 @@ class juGrid{
             this._body(model),
             this._footer(model)
         ]);
+        if(!this.__loaded){            
+            if(typeof this.model.onLoad==='function'){
+                let tid=setTimeout(()=>{this.model.onLoad();clearTimeout(tid);});
+            }
+            this.__loaded=true;
+        }
         return h('div.juGrid',[
             this._getPager(model.pager, dispatch, 'top'),
             table,
             this._getPager(model.pager, dispatch, 'bottom'),
             ]);
+        
     }
     update(model, action){ 
         switch (action.type) {
@@ -122,7 +132,7 @@ class juGrid{
         }
         return h('thead'+(this.model.headerClass||''),[
                 ...this._Extraheaders(model),
-                h('tr',model.columns.filter(col=>!col.hide).map((col, index)=>h('th'+(col.hClass||''),{key:index, on:{click:()=>this._sort(col)}}, [col.sort?h('i.fa',{class:this._sortIcon(col)}):'',col.header])))
+                h('tr',model.columns.filter(col=>!col.hide).map((col, index)=>h('th'+(col.hClass||''),{key:this.__id+index, on:{click:()=>this._sort(col)}}, [col.sort?h('i.fa',{class:this._sortIcon(col)}):'',col.header])))
             ])
     }    
     _body(model){
@@ -391,7 +401,7 @@ class juGrid{
             }
             return classObj;
         }else{
-            const classObj= {};
+            const classObj=reciver.class?{...reciver.class}:{};
             if(reciver.singleSelect||reciver.multiSelect){
                 classObj.selected=row.selected;
             }
@@ -400,10 +410,10 @@ class juGrid{
        
     }
     _bindStyle(row, ri, reciver){
-        return typeof reciver.style === 'function'?reciver.style(row, ri):undefined
+        return typeof reciver.style === 'function'?reciver.style(row, ri):reciver.style
     }
     _bindProps(row, ri, reciver){
-        return typeof reciver.props === 'function'?reciver.props(row, ri):{}
+        return typeof reciver.props === 'function'?reciver.props(row, ri):reciver.props||{}
     }
     _Extraheaders(model){
         if(!model.headers){
