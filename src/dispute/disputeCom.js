@@ -24,15 +24,19 @@ export default class disputeCom{
                
     }
     rprOnload(){
-         this.service.getRpr().then(res=>{
+         this.service.getHcfa().then(res=>{ 
+             this.hcfaData=res.data;          
+             this.Rpr.setSelectData(4, this.hcfaData);          
+        });
+        this.service.getRpr().then(res=>{
             this.Rpr.setData(res.data).selectRow(0).refresh();
         });
     }
     hcfaOnload(){
-        this.service.getHcfa().then(res=>{           
-            this.Hcfa.setData(res.data).selectRow(0).refresh();
-            
+        this.service.getType().then(res=>{
+            this.Hcfa.setSelectData(2, res.data).refresh();
         });
+        this.Hcfa.setData(this.hcfaData).selectRow(0); 
     }
     init(){
         return {
@@ -123,10 +127,10 @@ export default class disputeCom{
                 this.Rpr.refresh();
             },                
             columns:[
-                {header:'Short Desc',editPer:row=>this.editable, sort:true, iopts:{class:r=>this.formClass(),props:{maxLength:5}}, focus:true, field:'shortDes',type:'text'},
+                {header:'Short Desc',editPer:row=>this.editable, sort:true,style:{textTransform: 'uppercase'}, iopts:{class:r=>this.formClass(),props:{maxLength:5},style:{textTransform: 'uppercase'}}, focus:true, field:'shortDes',type:'text'},
                 {header:'Auto', field:'auto', tnsValue:val=>val?'Yes':'No'},
-                {header:'Description',editPer:row=>this.editable,sort:true, iopts:{class:r=>this.formClass(),props:{maxLength:30}}, field:'des', type:'text'},
-                {header:'HCFA Code',editPer:row=>this.editable,sort:true,iopts:{class:r=>this.formClass()}, field:'hcfaCd', type:'select'},
+                {header:'Description',editPer:row=>this.editable,sort:true, style:{textTransform: 'uppercase'}, iopts:{class:r=>this.formClass(),props:{maxLength:30},style:{textTransform: 'uppercase'}}, field:'des', type:'text'},
+                {header:'HCFA Code',id:4, editPer:row=>this.editable,sort:true,iopts:{class:r=>this.formClass()}, field:'hcfaCd', type:'select', valueProp:'hcfaCd', textProp:'hcfaCd'},
                 {header:'Active',editPer:row=>this.editable,sort:true, field :'active', type:'checkbox', tnsValue:val=>val?'Yes':'No'},
                 
             ],            
@@ -159,9 +163,9 @@ export default class disputeCom{
                 this.Hcfa.refresh();
             },                
             columns:[
-                {header:'HCFA Codesd',editPer:row=>this.editable,sort:true, iopts:{class:r=>this.formClass(),props:{maxLength:2}}, focus:true, field:'hcfaCd',type:'text', tnsValue:val=>val?val:[h('b','new...')]},
-                {header:'Type',editPer:row=>this.editable,sort:true,iopts:{class:r=>this.formClass()}, field:'type', type:'select'},
-                {header:'Descriptionxx',editPer:row=>this.editable,sort:true, iopts:{class:r=>this.formClass(),props:{maxLength:30}}, field:'des', type:'text'}                
+                {header:'HCFA Code',editPer:row=>this.editable,sort:true, iopts:{class:r=>this.formClass(),props:{maxLength:2}}, focus:true, field:'hcfaCd',type:'text', tnsValue:val=>val?val:[h('b','new...')]},
+                {header:'Type',id:2, editPer:row=>this.editable,sort:true,iopts:{class:r=>this.formClass()}, field:'type', type:'select'},
+                {header:'Description',editPer:row=>this.editable,sort:true,style:{textTransform: 'uppercase'}, iopts:{class:r=>this.formClass(),props:{maxLength:30},style:{textTransform: 'uppercase'}}, field:'des', type:'text'}                
             ],            
             footers:[               
             [

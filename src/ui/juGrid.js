@@ -21,6 +21,16 @@ class juGrid{
         if(this._isUndef(model.columns)){
             return h('div','columns undefined');
         }
+        model.columns.forEach(col=>{
+            if(col.type==='select'){
+                if(this._isUndef(col.valueProp)){
+                    col.valueProp='value';
+                }
+                if(this._isUndef(col.textProp)){
+                    col.textProp='text';
+                }
+            }
+        });
         if(this._isUndef(model.aews)){
             model.aews=true;
         }
@@ -205,7 +215,7 @@ class juGrid{
                        class:this._bindClass(row, ri, col.iopts),
                        props:{...this._bindProps(row, ri, col.iopts), value:row[col.field]}
                     },
-                    data.map(d=>h('option',{props:{value:d.value}}, d.text))
+                    data.map(d=>h('option',{props:{value:d[col.valueProp]}}, d[col.textProp]))
                     )
                     ]
                     :this._transformValue(row[col.field], row, col)
@@ -242,12 +252,12 @@ class juGrid{
         }
         val=val.toString();
         if(Array.isArray(data)){
-            const item=data.find(_=>_.value.toString()===val);
+            const item=data.find(_=>_[col.valueProp].toString()===val);
             if(item){
-                return item.text;
+                return item[col.textProp];
             }
         }
-        return '';
+        return val;
     }
     _transformValue(val, row, col, ri){
         if(col.type==='select'){
