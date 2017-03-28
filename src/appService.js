@@ -7,13 +7,17 @@ class appService{
     }
     setPopup(popup){
         this.popup=popup;
-        popup.model.options.modalClose=()=>{
-            if(this._popup_btn_name==='no' && typeof this._popup_promise_reject==='function'){
+        popup.model.options.modalClose=()=>{            
+            if(this._confirm && (this._popup_btn_name==='no'||this._popup_btn_name!=='yes') && typeof this._popup_promise_reject==='function'){
+                this._confirm=0;
                 this._popup_promise_reject(this._popup_btn_name);
             }
             else if(typeof this._popup_promise_resolve ==='function'){
                 this._popup_promise_resolve(this._popup_btn_name);
             }
+            this._popup_btn_name='';
+            this._popup_promise_reject=null;
+            this._popup_promise_resolve=null;
             return true;
         }
     }
@@ -33,6 +37,7 @@ class appService{
         return new Promise(accept=>{this._popup_promise_resolve=accept;});
     }
     confirm(title, msg){
+        this._confirm=1;
         this._set(title, msg);
         this.popup.model.options.buttons=[
             {label:'Yes',on:{click:()=>this._closeModel('yes')}, classNames:'.btn.btn-outline-success', elmSize:'sm'},
