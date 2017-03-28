@@ -3,6 +3,8 @@ import {html, h} from 'zaitun';
 import {juForm} from '../ui/juForm';
 import {juGrid} from '../ui/juGrid';
 import dservice from './disputeService';
+import appService from '../appService';
+
 export default class disputeCom{
     constructor(){
         this.form=new juForm();
@@ -65,6 +67,15 @@ export default class disputeCom{
              this.Hcfa.addRow({hcfaCd:'', type:'', des:'', new:true}).refresh();
         }
     }
+    remove(){
+        appService.confirm('Confirm', <p>Are you sure?</p>)
+        .then(()=>{
+            this.activeTab==='RPR Dispute Codes'?
+                this.Rpr.removeRow(this.rprSR).refresh()
+                :this.Hcfa.removeRow(this.hcfaSR).refresh()
+        })
+        .catch(console.error);
+    }
     getFormOptions(){
         return {
             viewMode:'form',  name:'dispute',          
@@ -80,7 +91,7 @@ export default class disputeCom{
                  footer:model=><div classNames="">
                         <button disabled={!this.buttons.save} classNames=".btn.btn-outline-success.btn-sm">Save</button>&nbsp;
                         <button disabled={!this.buttons.add && !this.editable} on-click={()=>this.add()} classNames=".btn.btn-outline-success.btn-sm">Add</button>&nbsp;
-                        <button disabled={!this.buttons.delete } classNames=".btn.btn-outline-success.btn-sm">Delete</button>
+                        <button disabled={!this.buttons.delete } on-click={()=>this.remove()} classNames=".btn.btn-outline-success.btn-sm">Delete</button>
                  </div>,
                  tabs:{
                     'RPR Dispute Codes':{inputs:[
@@ -119,7 +130,7 @@ export default class disputeCom{
             singleSelect:true,            
             selectedRows:(rows, ri, ev)=>{
                 this.buttons.delete=this.editable;
-                
+                this.rprSR=rows;
             },           
             recordChange:(row, col, ri, ev)=>{
                 row.updated=true;
@@ -143,7 +154,7 @@ export default class disputeCom{
             ] 
         }
     }
-    getHcfaGridOptions(){        
+    getHcfaGridOptions(){                
         return {
             onLoad:this.hcfaOnload.bind(this),
             tableClass:'.table-sm.table-bordered.xtable-responsive',            
@@ -176,4 +187,5 @@ export default class disputeCom{
             ] 
         }
     }
+    
 }

@@ -528,7 +528,7 @@ class juGrid{
         }
         return this;
     }
-    removeRow(row){         
+    removeRow(row){        
         var index=this.data.indexOf(this.selectedRow);        
         this.data.splice(index, 1)
         if(typeof this.model.pager.sspFn!=='function'){  

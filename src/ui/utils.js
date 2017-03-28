@@ -8,4 +8,5 @@ function s4() {
       .toString(16)
       .substring(1);
 }
+
 export  {guid, s4};
