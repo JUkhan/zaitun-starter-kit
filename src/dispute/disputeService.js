@@ -7,12 +7,12 @@ export default class disputeService{
     getPermission(){
         return Promise.resolve({ editable:true});
     }
-    getRpr(){
+    getRpr(params){
         const data=[];
-        for (var index = 0; index < 150; index++) {
+        for (var index = 0; index < params.pageSize; index++) {
             data.push({shortDes:this._charByLimit(5), auto:false, des:this._charByLimit(25), hcfaCd:this._getHccd(), active:this._boolValue()})
         }
-        return Promise.resolve({data});
+        return Promise.resolve({data,totalRecords:150});
     }
     getHcfa(){
         const data=[];

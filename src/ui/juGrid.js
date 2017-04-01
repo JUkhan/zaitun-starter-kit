@@ -72,9 +72,12 @@ class juGrid{
         if(this._isUndef(model.pagerPos)){
             model.pagerPos='both';
         }
-         if(this._isUndef(model.pager.nav)){
+        if(this._isUndef(model.pager.nav)){
             model.pager.nav=true;
-         }
+        }
+        if(typeof model.pager.sspFn==='function'){
+            this.pager.sspFn=model.pager.sspFn;
+        }
         if(this._isUndef(model.pager.searchFn)){
            model.pager.searchFn=(data, val)=>{
                 const res=[], columns=this.model.columns, len=columns.length;
@@ -461,7 +464,7 @@ class juGrid{
             if(!this.model.hidePager && !this.pager.sspFn){
                 return  [col.cellRenderer(this.pager.data||[], this.data||[], ri)];
             }
-            return  [col.cellRenderer(this.data||[], ri)];
+            return  [col.cellRenderer(this.data||[], this.pager, ri)];
         }
         return col.text;        
     }  

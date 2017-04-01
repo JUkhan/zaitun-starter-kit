@@ -21,7 +21,7 @@ class appService{
             return true;
         }
     }
-    _closeModel(btnName){
+    _closeModal(btnName){
         this._popup_btn_name=btnName;
         this.popup.modalClose();
     }
@@ -31,7 +31,7 @@ class appService{
     }
     alert(title, msg){
         this._set(title, msg);
-        this.popup.model.options.buttons=[{label:'OK',on:{click:()=>this._closeModel('ok')}, classNames:'.btn.btn-outline-success', elmSize:'sm'}],
+        this.popup.model.options.buttons=[{label:'OK',on:{click:()=>this._closeModal('ok')}, classNames:'.btn.btn-outline-success', elmSize:'sm'}],
         this.popup.refresh();
         this.popup.showModal(1);
         return new Promise(accept=>{this._popup_promise_resolve=accept;});
@@ -39,9 +39,9 @@ class appService{
     confirm(title, msg){
         this._confirm=1;
         this._set(title, msg);
-        this.popup.model.options.buttons=[
-            {label:'Yes',on:{click:()=>this._closeModel('yes')}, classNames:'.btn.btn-outline-success', elmSize:'sm'},
-            {label:'No',on:{click:()=>this._closeModel('no')}, classNames:'.btn.btn-outline-success', elmSize:'sm'}
+        this.popup.model.options.buttons=[        
+                {label:'Yes',on:{click:()=>this._closeModal('yes')}, classNames:'.btn.btn-outline-success', elmSize:'sm'},
+                {label:'No',on:{click:()=>this._closeModal('no')}, classNames:'.btn.btn-outline-success', elmSize:'sm'}
             ],
         this.popup.refresh();
         this.popup.showModal(1);

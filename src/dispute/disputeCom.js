@@ -29,10 +29,8 @@ export default class disputeCom{
          this.service.getHcfa().then(res=>{ 
              this.hcfaData=res.data;          
              this.Rpr.setSelectData(4, this.hcfaData);          
-        });
-        this.service.getRpr().then(res=>{
-            this.Rpr.setData(res.data).selectRow(0).refresh();
-        });
+        }); 
+        this.Rpr.pager.firePageChange();       
     }
     hcfaOnload(){
         this.service.getType().then(res=>{
@@ -119,14 +117,19 @@ export default class disputeCom{
         return {'form-control':1,'form-control-sm':1 };
     }
     getRprGridOptions(){        
-        return {
+        return {            
             onLoad:this.rprOnload.bind(this),
             tableClass:'.table-sm.table-bordered.xtable-responsive',            
             headerClass:'.thead-default',
             footerClass:'.thead-default', 
-            pager:{pageSize:10, linkPages:10, enablePowerPage:0, nav:1, search:1, pagerInfo:0, elmSize:'sm'},
+            pager:{pageSize:10, linkPages:10, enablePowerPage:0, nav:1, search:1, pagerInfo:0, elmSize:'sm',
+                sspFn:(params)=>{
+                    console.log(params);
+                   return this.service.getRpr(params)
+                }
+            },
             pagerPos:'top', //top|bottom|both --default both
-            //pageChange:data=>Grid.selectRow(0),
+            pageChange:data=>this.Rpr.selectRow(0),
             singleSelect:true,            
             selectedRows:(rows, ri, ev)=>{
                 this.buttons.delete=this.editable;
@@ -147,7 +150,7 @@ export default class disputeCom{
             ],            
             footers:[               
             [
-                {cellRenderer:data=><b>Total Rows: {data.length}</b>},                
+                {cellRenderer:(data, pager)=><b>Total Rows: {pager.totalRecords}</b>},                
                 {props:{colSpan:4}, cellRenderer:d=><b>Total Updated Rows: {d.filter(_=>_.updated).length}</b>}
                
             ]
