@@ -128,7 +128,7 @@ export default class disputeCom{
                    return this.service.getRpr(params)
                 }
             },
-            pagerPos:'top', //top|bottom|both --default both
+            //pagerPos:'top', //top|bottom|both --default both
             pageChange:data=>this.Rpr.selectRow(0),
             singleSelect:true,            
             selectedRows:(rows, ri, ev)=>{
@@ -164,7 +164,7 @@ export default class disputeCom{
             headerClass:'.thead-default',
             footerClass:'.thead-default', 
             pager:{pageSize:10, linkPages:10, enablePowerPage:0, nav:1, search:1, pagerInfo:0, elmSize:'sm'},
-            pagerPos:'top', //top|bottom|both --default both
+            //pagerPos:'top', //top|bottom|both --default both
             //pageChange:data=>Grid.selectRow(0),
             singleSelect:true,            
             selectedRows:(rows, ri, ev)=>{               

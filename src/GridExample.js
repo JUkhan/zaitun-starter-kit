@@ -34,8 +34,12 @@ export default class GridExample{
     formClass(){
         return {'form-control':1,'form-control-sm':1 };
     }
-    getGridOptions(){
-        const emptyObj={name:'', age:16, address:'', single:false, country:''}
+    add(){
+        this.Grid
+        .addRow({name:'', age:16, address:'', single:false, country:''})
+        .refresh();
+    }
+    getGridOptions(){       
         return {
             tableClass:'.table-sm.table-bordered.xtable-responsive',            
             headerClass:'.thead-default',
@@ -78,7 +82,7 @@ export default class GridExample{
                 {cellRenderer:data=><b>Total Rows: {data.length}</b>},
                 {cellRenderer:data=>
                     <div>
-                        <button on-click={()=>this.Grid.addRow({...emptyObj}).refresh()}>Add <i classNames="fa fa-plus"></i></button>&nbsp;
+                        <button on-click={()=>this.add()}>Add <i classNames="fa fa-plus"></i></button>&nbsp;
                         <button disabled={this.Grid.data.length===0} on-click={()=>confirm('Remove sure?')&& this.Grid.removeRow(this.selectedRow).pager.clickPage(this.Grid.pager.activePage)}>Remove <i classNames="fa fa-trash"></i></button>
                     </div>
                 },
