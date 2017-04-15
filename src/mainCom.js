@@ -4,6 +4,8 @@ import {html, Router} from 'zaitun';
 import {juForm} from './ui/juForm';
 import appService from './appService';
 
+import {Dispatcher, Actions} from './effect';
+
 const CHILD = Symbol('CHILD');
 
 export class mainCom{
@@ -13,6 +15,12 @@ export class mainCom{
     }
     onViewInit(){
        appService.setPopup(this.popup);
+
+       //set actions to the Router.CM. so that we can use it
+       //through out the app
+       const actions$=new Actions();
+       actions$.subscribe(action=>console.log(action));       
+       Router.CM.actions$=actions$;
     }
     init(){
         return {
