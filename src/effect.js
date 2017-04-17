@@ -1,3 +1,4 @@
+import {Router} from 'zaitun';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
@@ -16,7 +17,8 @@ export class EffectSubscription extends Subscription{
     constructor(){
         super();        
     }    
-    addEffect(actionStream){
+    addEffect(streamCallback){
+        const actionStream=streamCallback(Router.CM.actions$);
         this.add(actionStream.subscribe(ac=>{
             if(typeof ac.dispatch==='function'){
                 ac.dispatch(ac);
