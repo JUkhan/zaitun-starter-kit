@@ -16,11 +16,12 @@ export default class Counter{
     init(){               
         return {data:0, msg:''}
     }    
-	onViewInit(model, dispatch){
-       const lazyEffect=Router.CM.actions$.whenAction('lazy')
-        .delay(500)
-        .map(ac=>({...ac,type:INC}));
-        this.es.addEffect(lazyEffect);
+    onViewInit(model, dispatch){
+       this.es.addEffect(action$=>
+            action$.whenAction('lazy')
+                   .delay(500)
+                   .map(ac=>({...ac,type:INC}))
+        );
     }    
     canDeactivate(){
         return confirm('Do you want to leave this page?') //promise
