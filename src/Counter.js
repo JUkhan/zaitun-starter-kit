@@ -16,7 +16,7 @@ export default class Counter{
     init(){               
         return {data:0, msg:''}
     }    
-    onViewInit(model, dispatch){
+    afterViewRender(model, dispatch){
        this.es.addEffect(action$=>
             action$.whenAction('lazy')
                    .delay(500)
@@ -41,7 +41,7 @@ export default class Counter{
                 ;
     }   
     update(model, action){        
-        Router.CM.actions$.dispatch(action);
+        Router.CM.action$.dispatch(action);
         switch (action.type) {
             case INC:    
                return {data:model.data+1, msg:''};

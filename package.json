@@ -15,7 +15,7 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "rxjs": "^5.0.3",
-    "zaitun": "^1.5.25"
+    "zaitun": "^1.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

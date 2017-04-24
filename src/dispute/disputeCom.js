@@ -17,7 +17,7 @@ export default class disputeCom{
         this.editable=false; 
         this.hcfaSR={};
     }
-    onViewInit(rootModel, parentDispatch){
+    afterViewRender(rootModel, parentDispatch){
         this.service.getPermission().then(res=>{
             this.editable=res.editable;
             this.buttons.delete=true;

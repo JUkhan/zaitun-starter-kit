@@ -13,14 +13,14 @@ export class mainCom{
         this.popup=new juForm();
         
     }
-    onViewInit(){
+    afterViewRender(){
        appService.setPopup(this.popup);
 
        //set actions to the Router.CM. so that we can use it
        //through out the app
-       const actions$=new Actions();
-       actions$.subscribe(action=>console.log(action));       
-       Router.CM.actions$=actions$;
+       const action$=new Actions();
+       action$.subscribe(action=>console.log(action));       
+       Router.CM.action$=action$;
     }
     init(){
         return {
