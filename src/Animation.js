@@ -1,6 +1,5 @@
 /** @jsx html */
-import {jsx, Router} from 'zaitun';
-const html=jsx.html;
+import {html, Router} from 'zaitun';
 import {EffectSubscription} from './effect';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
