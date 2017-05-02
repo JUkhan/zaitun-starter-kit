@@ -10,7 +10,6 @@ import {juGrid} from './ui/juGrid';
 
 const TestForm=new juForm();
 const TestForm2=new juForm();
-const Counter=new clsCounter();
 const CounterList=new clsCounterList();
 const TodosCom=new Todos();
 const Grid=new juGrid();
@@ -18,12 +17,13 @@ const Grid=new juGrid();
 export default class FormExample{
     constructor(){
         this.selectedRow={};
+        this.Counter=new clsCounter();
     }    
     init(dispatch){       
        const model={};
        model.data={name:'Abdulla',ox:{age:32}, gender:2};
        model.options=this.getFormOptions(model, dispatch);
-       model.counter=Counter.init();
+       model.counter=this.Counter.init();
        model.counterList=CounterList.init();
        model.todos=TodosCom.init();
        model.grid=this.gridOptions();
@@ -36,6 +36,10 @@ export default class FormExample{
             {text:'Uzbekistan', value:3}
         ];
         Grid.setSelectData(4, countries);
+        this.Counter.afterViewRender();
+    }
+    onDestroy(){
+        this.Counter.onDestroy();
     }
     formClass(){
         return {'form-control':1,'form-control-sm':1 };
@@ -147,7 +151,7 @@ export default class FormExample{
                                     { size:3, 
                                         type:'component', 
                                         actionType:'Counter',
-                                        component:Counter,
+                                        component:this.Counter,
                                         field:'counter'
                                     }
                             ]},
@@ -218,10 +222,11 @@ export default class FormExample{
             <TestForm2 model={model.form2} dispatch={action=>dispatch({type:'form2', payload:action})} />
         </div>
     }
-    update(model, action){   
+    update(model, action){  
+
         switch (action.type) {
             case 'Counter':
-               model.form1.counter=Counter.update(model.form1.counter, action.action);                   
+               model.form1.counter=this.Counter.update(model.form1.counter, action.action);                   
                 return model;              
             case 'CounterList':
                 model.form1.counterList=CounterList.update(model.form1.counterList, action.action); 

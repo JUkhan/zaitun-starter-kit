@@ -51,7 +51,7 @@ export default class CounterList{
     update(model, action){
         switch (action.type) {
             case ADD:
-                const newCounter = {id: model.nextId, counter: Counter.init() };
+                const newCounter = {id: model.nextId, counter: this.Counter.init() };
                 return {
                     counters  : [...model.counters, newCounter],
                     nextId    : model.nextId + 1
