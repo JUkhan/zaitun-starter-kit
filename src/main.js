@@ -12,7 +12,8 @@ const routes=[
     {path:'/formExample', loadComponent:()=>System.import('./FormExample')},
     {path:'/gridExample', loadComponent:()=>System.import('./GridExample'), cache:true},
     {path:'/dispute', loadComponent:()=>System.import('./dispute/disputeCom'), cache:true},
-     {path:'/animation', loadComponent:()=>System.import('./Animation')}
+    {path:'/animation', loadComponent:()=>System.import('./Animation')},
+  
   ];
 bootstrap({
   containerDom:'#app',
