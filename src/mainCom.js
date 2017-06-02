@@ -19,7 +19,7 @@ export class mainCom{
        //set actions to the Router.CM. so that we can use it
        //through out the app
        const action$=new Actions();
-       action$.subscribe(action=>console.log(action));       
+       action$.subscribe(action=>{});       
        Router.CM.action$=action$;
     }
     init(){
