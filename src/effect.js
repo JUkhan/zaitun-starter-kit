@@ -24,6 +24,7 @@ export class EffectSubscription extends Subscription{
                 ac.dispatch(ac);
             }
         }));
+        return this;
     }    
     dispose(){
         if(!this.closed){            

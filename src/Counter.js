@@ -40,14 +40,15 @@ export default class Counter{
                 </span>             
                 ;
     }   
-    update(model, action){        
-        Router.CM.action$.dispatch(action);
+    update(model, action){     
+        
         switch (action.type) {
             case INC:    
                return {data:model.data+1, msg:''};
             case DEC:              
                return {data:model.data-1};
             case 'lazy':
+                Router.CM.action$.dispatch(action);
                 return {...model, msg:'incrementing...'}
            
             default:
