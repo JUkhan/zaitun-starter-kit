@@ -1,13 +1,16 @@
 webpackJsonp([2],{
 
-/***/ 143:
+/***/ 145:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_zaitun__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_zaitun___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_zaitun__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ui_juGrid__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ui_juForm__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ui_juGrid__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__disputeService__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__appService__ = __webpack_require__(57);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -17,40 +20,169 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var GridExample = function () {
-    function GridExample() {
-        _classCallCheck(this, GridExample);
 
-        console.log('gridExample constructor');
-        this.Grid = new __WEBPACK_IMPORTED_MODULE_1__ui_juGrid__["a" /* juGrid */]();
+
+var disputeCom = function () {
+    function disputeCom() {
+        _classCallCheck(this, disputeCom);
+
+        this.form = new __WEBPACK_IMPORTED_MODULE_1__ui_juForm__["a" /* juForm */]();
+        this.Rpr = new __WEBPACK_IMPORTED_MODULE_2__ui_juGrid__["a" /* juGrid */]();
+        this.Hcfa = new __WEBPACK_IMPORTED_MODULE_2__ui_juGrid__["a" /* juGrid */]();
+        this.service = new __WEBPACK_IMPORTED_MODULE_3__disputeService__["a" /* default */]();
+
+        this.activeTab = 'RPR Dispute Codes';
+        this.buttons = { save: false, add: false, delete: false };
+        this.editable = false;
+        this.hcfaSR = {};
     }
 
-    _createClass(GridExample, [{
-        key: 'init',
-        value: function init() {
-            return { gridOptions: this.getGridOptions() };
+    _createClass(disputeCom, [{
+        key: 'afterViewRender',
+        value: function afterViewRender(rootModel, parentDispatch) {
+            var _this = this;
+
+            this.service.getPermission().then(function (res) {
+                _this.editable = res.editable;
+                _this.buttons.delete = true;
+                _this.form.refresh();
+            });
         }
     }, {
-        key: 'onViewInit',
-        value: function onViewInit(model, dispatch) {
-            var countries = [{ text: 'Bangladesh', value: 1 }, { text: 'Pakistan', value: 2 }, { text: 'Uzbekistan', value: 3 }];
-            this.Grid.setSelectData(4, countries);
+        key: 'rprOnload',
+        value: function rprOnload() {
+            var _this2 = this;
+
+            this.service.getHcfa().then(function (res) {
+                _this2.hcfaData = res.data;
+                _this2.Rpr.setSelectData(4, _this2.hcfaData);
+            });
+            this.Rpr.pager.firePageChange();
+        }
+    }, {
+        key: 'hcfaOnload',
+        value: function hcfaOnload() {
+            var _this3 = this;
+
+            this.service.getType().then(function (res) {
+                _this3.Hcfa.setSelectData(2, res.data).refresh();
+            });
+            this.Hcfa.setData(this.hcfaData).selectRow(0);
+        }
+    }, {
+        key: 'init',
+        value: function init() {
+            return {
+                form: {
+                    options: this.getFormOptions(),
+                    rpr: this.getRprGridOptions(),
+                    hcfa: this.getHcfaGridOptions()
+                }
+            };
         }
     }, {
         key: 'view',
         value: function view(_ref) {
             var model = _ref.model,
-                dispatch = _ref.dispatch;
+                _dispatch = _ref.dispatch;
 
-            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["h"])('div', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["h"])('b', 'Grid Example'), this.Grid.view({ model: model.gridOptions, dispatch: dispatch })]);
+            this.model = model;
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                'div',
+                null,
+                this.form.view({ model: model.form, dispatch: function dispatch(fa) {
+                        return _dispatch({ type: 'formUpdate', formAction: fa });
+                    } })
+            );
         }
     }, {
         key: 'update',
         value: function update(model, action) {
             switch (action.type) {
+
                 default:
                     return model;
             }
+        }
+    }, {
+        key: 'add',
+        value: function add() {
+            if (this.activeTab === 'RPR Dispute Codes') {
+                this.Rpr.addRow({ shortDes: '', auto: false, des: '', hcfaCd: false, active: true, new: true }).refresh();
+            } else {
+                this.Hcfa.addRow({ hcfaCd: '', type: '', des: '', new: true }).refresh();
+            }
+        }
+    }, {
+        key: 'remove',
+        value: function remove() {
+            var _this4 = this;
+
+            __WEBPACK_IMPORTED_MODULE_4__appService__["a" /* default */].confirm('Confirm', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                'p',
+                null,
+                'Are you sure?'
+            )).then(function () {
+                _this4.activeTab === 'RPR Dispute Codes' ? _this4.Rpr.removeRow(_this4.rprSR).refresh() : _this4.Hcfa.removeRow(_this4.hcfaSR).refresh();
+            }).catch(console.error);
+        }
+    }, {
+        key: 'getFormOptions',
+        value: function getFormOptions() {
+            var _this5 = this;
+
+            return {
+                viewMode: 'form', name: 'dispute',
+                inputs: [{ type: 'tabs',
+                    activeTab: 'RPR Dispute Codes',
+                    tabClick: function tabClick(tabName, prevTab) {
+                        _this5.activeTab = tabName;
+                        _this5.buttons.delete = tabName === 'RPR Dispute Codes' ? true : _this5.hcfaSR.new;
+
+                        return true;
+                    },
+                    footer: function footer(model) {
+                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                            'div',
+                            { classNames: '' },
+                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                                'button',
+                                { disabled: !_this5.buttons.save, classNames: '.btn.btn-outline-success.btn-sm' },
+                                'Save'
+                            ),
+                            '\xA0',
+                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                                'button',
+                                { disabled: !_this5.buttons.add && !_this5.editable, 'on-click': function onClick() {
+                                        return _this5.add();
+                                    }, classNames: '.btn.btn-outline-success.btn-sm' },
+                                'Add'
+                            ),
+                            '\xA0',
+                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                                'button',
+                                { disabled: !_this5.buttons.delete, 'on-click': function onClick() {
+                                        return _this5.remove();
+                                    }, classNames: '.btn.btn-outline-success.btn-sm' },
+                                'Delete'
+                            )
+                        );
+                    },
+                    tabs: {
+                        'RPR Dispute Codes': { inputs: [{
+                                type: 'component',
+                                actionType: 'rpr',
+                                component: this.Rpr,
+                                field: 'rpr'
+                            }] },
+                        'HCFA Dispute Codes': { inputs: [{
+                                type: 'component',
+                                actionType: 'hcfa',
+                                component: this.Hcfa,
+                                field: 'hcfa'
+                            }] }
+                    } }]
+            };
         }
     }, {
         key: 'formClass',
@@ -58,124 +190,146 @@ var GridExample = function () {
             return { 'form-control': 1, 'form-control-sm': 1 };
         }
     }, {
-        key: 'add',
-        value: function add() {
-            this.Grid.addRow({ name: '', age: 16, address: '', single: false, country: '' }).refresh();
-        }
-    }, {
-        key: 'getGridOptions',
-        value: function getGridOptions() {
-            var _this = this;
+        key: 'getRprGridOptions',
+        value: function getRprGridOptions() {
+            var _this6 = this;
 
             return {
+                onLoad: this.rprOnload.bind(this),
                 tableClass: '.table-sm.table-bordered.xtable-responsive',
                 headerClass: '.thead-default',
                 footerClass: '.thead-default',
-                pager: { pageSize: 5, linkPages: 10, enablePowerPage: 0, nav: 1, search: 1, pagerInfo: 1, elmSize: 'sm' },
-                hideHeader: !true,
-                hideFooter: !true,
-                hidePager: !true,
-                //aes:true, //disallowed empty selection --default false
-                pagerPos: 'top', //top|bottom|both --default both
-                //pageChange:data=>Grid.selectRow(0),
+                pager: { pageSize: 10, linkPages: 10, enablePowerPage: 0, nav: 1, search: 1, pagerInfo: 0, elmSize: 'sm',
+                    sspFn: function sspFn(params) {
+                        console.log(params);
+                        return _this6.service.getRpr(params);
+                    }
+                },
+                //pagerPos:'top', //top|bottom|both --default both
+                pageChange: function pageChange(data) {
+                    return _this6.Rpr.selectRow(0);
+                },
                 singleSelect: true,
-                //multiSelect:true,
                 selectedRows: function selectedRows(rows, ri, ev) {
-                    //this.selectedRow.editable=false;
-                    //rows.editable=true;
-                    _this.selectedRow = rows;
+                    _this6.buttons.delete = _this6.editable;
+                    _this6.rprSR = rows;
                 },
-                aews: true, //apply Editable When Selected - default true 
                 recordChange: function recordChange(row, col, ri, ev) {
-                    _this.Grid.refresh();
+                    row.updated = true;
+                    _this6.buttons.save = true;
+                    _this6.Rpr.refresh();
                 },
-                //on:{click:(row, i, ev)=>{console.log(row, i, ev)}},
-                //style:(row, i)=>({color:'gray'}),
-                //class:(row, i)=>({hide:1}),          
-                columns: [{ header: 'Name', hClass: '.max', sort: true, iopts: { class: function _class(r) {
-                            return _this.formClass();
-                        } }, focus: true, field: 'name', type: 'text' }, { header: 'Age', sort: true, iopts: { class: function _class(r) {
-                            return _this.formClass();
-                        } }, editPer: function editPer(row) {
-                        return false;
-                    }, field: 'age', type: 'number', tnsValue: function tnsValue(val) {
-                        return val + ' - formated';
-                    } }, { header: 'Birth Date', sort: true, iopts: { class: function _class(r) {
-                            return _this.formClass();
-                        } }, field: 'address', type: 'date' }, { id: 4, header: 'Country', iopts: { class: function _class(r) {
-                            return _this.formClass();
-                        } }, field: 'country', type: 'select' }, { header: 'Single?', field: 'single', type: 'checkbox', tnsValue: function tnsValue(val) {
+                columns: [{ header: 'Short Desc', editPer: function editPer(row) {
+                        return _this6.editable;
+                    }, sort: true, style: { textTransform: 'uppercase' }, iopts: { class: function _class(r) {
+                            return _this6.formClass();
+                        }, props: { maxLength: 5 }, style: { textTransform: 'uppercase' } }, focus: true, field: 'shortDes', type: 'text' }, { header: 'Auto', field: 'auto', tnsValue: function tnsValue(val) {
+                        return val ? 'Yes' : 'No';
+                    } }, { header: 'Description', editPer: function editPer(row) {
+                        return _this6.editable;
+                    }, sort: true, style: { textTransform: 'uppercase' }, iopts: { class: function _class(r) {
+                            return _this6.formClass();
+                        }, props: { maxLength: 30 }, style: { textTransform: 'uppercase' } }, field: 'des', type: 'text' }, { header: 'HCFA Code', id: 4, editPer: function editPer(row) {
+                        return _this6.editable;
+                    }, sort: true, iopts: { class: function _class(r) {
+                            return _this6.formClass();
+                        } }, field: 'hcfaCd', type: 'select', valueProp: 'hcfaCd', textProp: 'hcfaCd' }, { header: 'Active', editPer: function editPer(row) {
+                        return _this6.editable;
+                    }, sort: true, field: 'active', type: 'checkbox', tnsValue: function tnsValue(val) {
                         return val ? 'Yes' : 'No';
                     } }],
-                xheaders: [[{ text: 'Name', props: { colSpan: 3 } }, { text: 'Country', props: { colSpan: 2 } }]],
-                footers: [
-                //[{text:'footer1',style:col=>({color:'red'})},{text:'footer1',props:{colSpan:4}}],
-                [{ cellRenderer: function cellRenderer(data) {
+                footers: [[{ cellRenderer: function cellRenderer(data, pager) {
+                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                            'b',
+                            null,
+                            'Total Rows: ',
+                            pager.totalRecords
+                        );
+                    } }, { props: { colSpan: 4 }, cellRenderer: function cellRenderer(d) {
+                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
+                            'b',
+                            null,
+                            'Total Updated Rows: ',
+                            d.filter(function (_) {
+                                return _.updated;
+                            }).length
+                        );
+                    } }]]
+            };
+        }
+    }, {
+        key: 'getHcfaGridOptions',
+        value: function getHcfaGridOptions() {
+            var _this7 = this;
+
+            return {
+                onLoad: this.hcfaOnload.bind(this),
+                tableClass: '.table-sm.table-bordered.xtable-responsive',
+                headerClass: '.thead-default',
+                footerClass: '.thead-default',
+                pager: { pageSize: 10, linkPages: 10, enablePowerPage: 0, nav: 1, search: 1, pagerInfo: 0, elmSize: 'sm' },
+                //pagerPos:'top', //top|bottom|both --default both
+                //pageChange:data=>Grid.selectRow(0),
+                singleSelect: true,
+                selectedRows: function selectedRows(rows, ri, ev) {
+                    _this7.buttons.delete = rows.new;
+                    _this7.hcfaSR = rows;
+                },
+                recordChange: function recordChange(row, col, ri, ev) {
+                    row.updated = true;
+                    _this7.buttons.save = true;
+                    _this7.Hcfa.refresh();
+                },
+                columns: [{ header: 'HCFA Code', editPer: function editPer(row) {
+                        return _this7.editable;
+                    }, sort: true, iopts: { class: function _class(r) {
+                            return _this7.formClass();
+                        }, props: { maxLength: 2 } }, focus: true, field: 'hcfaCd', type: 'text', tnsValue: function tnsValue(val) {
+                        return val ? val : [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["h"])('b', 'new...')];
+                    } }, { header: 'Type', id: 2, editPer: function editPer(row) {
+                        return _this7.editable;
+                    }, sort: true, iopts: { class: function _class(r) {
+                            return _this7.formClass();
+                        } }, field: 'type', type: 'select' }, { header: 'Description', editPer: function editPer(row) {
+                        return _this7.editable;
+                    }, sort: true, style: { textTransform: 'uppercase' }, iopts: { class: function _class(r) {
+                            return _this7.formClass();
+                        }, props: { maxLength: 30 }, style: { textTransform: 'uppercase' } }, field: 'des', type: 'text' }],
+                footers: [[{ cellRenderer: function cellRenderer(data) {
                         return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
                             'b',
                             null,
                             'Total Rows: ',
                             data.length
                         );
-                    } }, { cellRenderer: function cellRenderer(data) {
-                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
-                            'div',
-                            null,
-                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
-                                'button',
-                                { 'on-click': function onClick() {
-                                        return _this.add();
-                                    } },
-                                'Add ',
-                                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])('i', { classNames: 'fa fa-plus' })
-                            ),
-                            '\xA0',
-                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
-                                'button',
-                                { disabled: _this.Grid.data.length === 0, 'on-click': function onClick() {
-                                        return confirm('Remove sure?') && _this.Grid.removeRow(_this.selectedRow).pager.clickPage(_this.Grid.pager.activePage);
-                                    } },
-                                'Remove ',
-                                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])('i', { classNames: 'fa fa-trash' })
-                            )
-                        );
-                    }
-                }, { props: { colSpan: 2 }, cellRenderer: function cellRenderer(d) {
+                    } }, { props: { colSpan: 4 }, cellRenderer: function cellRenderer(d) {
                         return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
                             'b',
                             null,
-                            'Total Selected Rows: ',
+                            'Total Updated Rows: ',
                             d.filter(function (_) {
-                                return _.selected;
+                                return _.updated;
                             }).length
-                        );
-                    } }, { cellRenderer: function cellRenderer(data) {
-                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_zaitun__["html"])(
-                            'b',
-                            null,
-                            data.reduce(function (a, b) {
-                                return a + (b.single ? 1 : 0);
-                            }, 0)
                         );
                     } }]]
             };
         }
     }]);
 
-    return GridExample;
+    return disputeCom;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = GridExample;
+/* harmony default export */ __webpack_exports__["default"] = disputeCom;
 
 /***/ }),
 
-/***/ 145:
+/***/ 146:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_zaitun__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_zaitun___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_zaitun__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__juPager__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__juPager__ = __webpack_require__(147);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(55);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return juGrid; });
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -936,7 +1090,7 @@ var juGrid = function () {
 
 /***/ }),
 
-/***/ 146:
+/***/ 147:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1272,6 +1426,94 @@ var juPage = function () {
 }();
 
 
+
+/***/ }),
+
+/***/ 149:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var disputeService = function () {
+    function disputeService() {
+        _classCallCheck(this, disputeService);
+
+        this.ch = ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'f', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        this._hcfaCode();
+    }
+
+    _createClass(disputeService, [{
+        key: 'getPermission',
+        value: function getPermission() {
+            return Promise.resolve({ editable: true });
+        }
+    }, {
+        key: 'getRpr',
+        value: function getRpr(params) {
+            var data = [];
+            for (var index = 0; index < params.pageSize; index++) {
+                data.push({ shortDes: this._charByLimit(5), auto: false, des: this._charByLimit(25), hcfaCd: this._getHccd(), active: this._boolValue() });
+            }
+            return Promise.resolve({ data: data, totalRecords: 150 });
+        }
+    }, {
+        key: 'getHcfa',
+        value: function getHcfa() {
+            var data = [];
+            for (var index = 1; index < 45; index++) {
+                data.push({ hcfaCd: this.hccd[index], type: index % 2 == 0 ? 'PDC' : 'MCSD', des: this._charByLimit(25) });
+            }
+            return Promise.resolve({ data: data });
+        }
+    }, {
+        key: 'getType',
+        value: function getType() {
+            var data = [];
+            data.push({ text: 'PDC', value: 'PDC' });
+            data.push({ text: 'MCSD', value: 'MCSD' });
+            return Promise.resolve({ data: data });
+        }
+    }, {
+        key: '_getHccd',
+        value: function _getHccd() {
+            return this.hccd[Math.ceil(Math.random() * 50)];
+        }
+    }, {
+        key: '_hcfaCode',
+        value: function _hcfaCode() {
+            this.hccd = [''];
+            for (var index = 0; index < 50; index++) {
+                this.hccd.push(this._charByLimit(2));
+            }
+        }
+    }, {
+        key: '_boolValue',
+        value: function _boolValue() {
+            return Math.ceil(Math.random() * 2) === 1;
+        }
+    }, {
+        key: '_randChar',
+        value: function _randChar() {
+            return this.ch[Math.ceil(Math.random() * 26)];
+        }
+    }, {
+        key: '_charByLimit',
+        value: function _charByLimit(limit) {
+            var res = [];
+            for (var index = 0; index < limit; index++) {
+                res.push(this._randChar());
+            }
+            return res.join('');
+        }
+    }]);
+
+    return disputeService;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = disputeService;
 
 /***/ })
 
