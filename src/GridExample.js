@@ -11,7 +11,8 @@ export default class GridExample{
     init(){
         return { gridOptions:this.getGridOptions()}
     }
-    afterViewRender(model, dispatch){        
+    afterViewRender(model, dispatch){   
+        console.log('afterviewRender');     
         const countries=[
             {text:'Bangladesh', value:1},
             {text:'Pakistan', value:2},
@@ -22,7 +23,7 @@ export default class GridExample{
     view({model, dispatch}){
         return h('div',[
             h('b', 'Grid Example'),
-            this.Grid.view({model:model.gridOptions,dispatch})
+            this.Grid.view({model:model.gridOptions, dispatch})
         ])
     }
     update(model, action){
@@ -71,7 +72,7 @@ export default class GridExample{
                 {header:'Single?', field :'single', type:'checkbox', tnsValue:val=>val?'Yes':'No'},
                 
             ],
-            xheaders:[
+            headers:[
                 [{text:'Name', props:{colSpan:3}},
                  {text:'Country', props:{colSpan:2}}   
                 ]

@@ -16,6 +16,7 @@ const Grid=new juGrid();
 
 export default class FormExample{
     constructor(){
+        console.log('FormExample');
         this.selectedRow={};
         this.Counter=new clsCounter();
     }    
@@ -211,7 +212,8 @@ export default class FormExample{
         }
         Grid.setData(data).selectRow(0).refresh();
     }
-    view({model, dispatch}){    
+    view({model, dispatch}){   
+        console.log(model) ;
         this.model=model;
         return <div>
         <div>
