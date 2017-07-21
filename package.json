@@ -16,7 +16,7 @@
     "babel-polyfill": "^6.23.0",
     "circular-json": "^0.3.1",
     "rxjs": "^5.0.3",
-    "zaitun": "^1.6.4"
+    "zaitun": "^1.6.5"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
